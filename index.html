@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA JobConnect</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#111827;color:white;padding:18px 7%;display:flex;justify-content:space-between;align-items:center}
+.container{max-width:1050px;margin:auto;padding:35px 20px}.hero,.card{background:white;border-radius:18px;padding:28px;margin-bottom:22px;box-shadow:0 5px 20px #0000000d}
+h1{font-size:42px;margin:8px 0}.tag{color:#2563eb;font-weight:bold}
+input{width:100%;padding:12px;margin:8px 0 15px;border:1px solid #ccd3df;border-radius:8px}
+button{background:#2563eb;color:white;border:0;border-radius:8px;padding:11px 16px;font-weight:bold;cursor:pointer}
+.match{font-size:24px;font-weight:bold}.gap{color:#9a3412}.good{color:#166534}
+footer{text-align:center;padding:30px;color:#64748b}
+</style></head>
+<body>
+<header><h2>SA JobConnect 🇿🇦</h2><span>AWS re/Start Project</span></header>
+<div class="container">
+<section class="hero"><span class="tag">YOUTH EMPLOYMENT & SKILLS PLATFORM</span>
+<h1>Connect your skills to opportunities.</h1>
+<p>SA JobConnect helps job seekers compare their skills with entry-level opportunities and identify areas for development.</p></section>
+<section class="card"><h2>Skills Matcher</h2>
+<label>Your skills (separate with commas)</label>
+<input id="skills" placeholder="Python, AWS, Git, Linux, SQL">
+<button onclick="matchJobs()">Find matching opportunities</button>
+<div id="results" style="margin-top:22px"></div></section>
+</div><footer>SA JobConnect • AWS re/Start Portfolio Project</footer>
+<script>
+const jobs=[
+{title:"Junior Business Analyst",company:"SA Digital Solutions",location:"Durban / Hybrid",skills:["business analysis","requirements","sql","communication"]},
+{title:"Cloud Support Intern",company:"CloudPath Africa",location:"Johannesburg / Hybrid",skills:["aws","linux","networking","troubleshooting"]},
+{title:"Junior Python Developer",company:"TechBridge ZA",location:"Remote",skills:["python","flask","git","sql"]},
+{title:"IT Support Technician",company:"KwaZulu Tech Services",location:"Durban",skills:["windows","networking","troubleshooting","customer service"]}];
+function matchJobs(){
+let skills=document.getElementById("skills").value.toLowerCase().split(",").map(x=>x.trim()).filter(Boolean);
+if(!skills.length){document.getElementById("results").innerHTML="<p>Enter at least one skill.</p>";return;}
+let results=jobs.map(j=>{let matched=j.skills.filter(s=>skills.includes(s));let score=Math.round(matched.length/j.skills.length*100);let missing=j.skills.filter(s=>!skills.includes(s));return {...j,score,missing};}).sort((a,b)=>b.score-a.score);
+document.getElementById("results").innerHTML=results.map(j=>`<div class="card"><div class="match">${j.score}% match</div><h3>${j.title}</h3><p><b>${j.company}</b> • ${j.location}</p><p><b>Required:</b> ${j.skills.join(", ")}</p><p class="${j.missing.length?'gap':'good'}"><b>${j.missing.length?'Skills to develop:':'Good match — no listed skill gaps.'}</b> ${j.missing.join(", ")}</p></div>`).join("");
+}
+</script></body></html>
